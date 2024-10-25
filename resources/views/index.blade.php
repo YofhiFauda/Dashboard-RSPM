@@ -119,7 +119,7 @@
             ['name' => 'Psikologi', 'icon' => 'fa-folder-open', 'color' => 'green'],
             ['name' => 'Kandungan & Kebidanan', 'icon' => 'fa-chart-pie', 'color' => 'yellow'],
             ['name' => 'Jiwa', 'icon' => 'fa-life-ring', 'color' => 'red'],
-            ['name' => 'Security', 'icon' => 'fa-shield-alt', 'color' => 'blue'],
+            ['name' => 'Pelayanan BPJS', 'icon' => 'fa-shield-alt', 'color' => 'blue'],
             ['name' => 'Billing', 'icon' => 'fa-file-invoice-dollar', 'color' => 'green'],
             ['name' => 'Projects', 'icon' => 'fa-briefcase', 'color' => 'yellow'],
             ['name' => 'Help Center', 'icon' => 'fa-question-circle', 'color' => 'red']
