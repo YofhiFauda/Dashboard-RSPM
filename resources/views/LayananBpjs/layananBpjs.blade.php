@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BPJS PDF Generator</title>
+    <title>Layanan BPJS</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
     .download-btn {
         background-color: #4CAF50; /* Warna hijau */
@@ -23,15 +24,20 @@
 </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Layanan BPJS - PDF Generator</a>
-        </div>
-    </nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <a class="btn btn-outline-secondary back-btn" href="{{ url('/') }}">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <a class="navbar-brand mx-auto" href="#">Layanan BPJS - PDF Generator</a>
+        <!-- Placeholder untuk menjaga kesetimbangan -->
+        <span class="navbar-text"></span>
+    </div>
+</nav>
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-5">
                 <div class="card">
                     <div class="card-header">Convert Jasper File to PDF</div>
                     <div class="card-body">
