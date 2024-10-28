@@ -13,6 +13,15 @@
   <link rel="stylesheet" href="{{ asset('lte/dist/css/adminlte.min.css') }}">
   <!-- Custom CSS -->
   <style>
+    /* body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #f8fafc, #dbeafe, #93c5fd);
+    font-family: 'Helvetica Neue', sans-serif;
+} */
+
+
     html, body {
       overflow-y: scroll; /* Menyembunyikan scrollbar vertikal */
     }
@@ -111,7 +120,7 @@
             ['name' => 'Radiologi', 'icon' => 'fa-tasks', 'color' => 'green'],
             ['name' => 'Jantung & Pembulu Darah', 'icon' => 'fa-chart-bar', 'color' => 'yellow'],
             ['name' => 'Penyakit Dalam', 'icon' => 'fa-star', 'color' => 'red'],
-            ['name' => 'Laboratorium', 'icon' => 'fa-cogs', 'color' => 'blue'],
+            ['name' => 'Laboratorium', 'icon' => 'fa-cogs', 'color' => 'blue'], 
             ['name' => 'Anak', 'icon' => 'fa-calendar-alt', 'color' => 'green'],
             ['name' => 'Rehab Medik', 'icon' => 'fa-comments', 'color' => 'yellow'],
             ['name' => 'Akupuntur Medik', 'icon' => 'fa-bell', 'color' => 'red'],
@@ -119,23 +128,27 @@
             ['name' => 'Psikologi', 'icon' => 'fa-folder-open', 'color' => 'green'],
             ['name' => 'Kandungan & Kebidanan', 'icon' => 'fa-chart-pie', 'color' => 'yellow'],
             ['name' => 'Jiwa', 'icon' => 'fa-life-ring', 'color' => 'red'],
-            ['name' => 'Pelayanan BPJS', 'icon' => 'fa-shield-alt', 'color' => 'blue'],
+            ['name' => 'Pelayanan BPJS', 'icon' => 'fa-shield-alt', 'color' => 'blue', 'route' => route('layanan-bpjs')],
             ['name' => 'Billing', 'icon' => 'fa-file-invoice-dollar', 'color' => 'green'],
             ['name' => 'Projects', 'icon' => 'fa-briefcase', 'color' => 'yellow'],
-            ['name' => 'Help Center', 'icon' => 'fa-question-circle', 'color' => 'red']
+            ['name' => 'Help Center', 'icon' => 'fa-question-circle', 'color' => 'red'],
           ];
         @endphp
 
         @foreach($menus as $menu)
           <div class="col-md-3 dashboard-item-container">
-            <div class="dashboard-item">
-              <div class="icon-wrapper icon-{{ $menu['color'] }}">
-                <i class="fas {{ $menu['icon'] }}"></i>
-              </div>
-              <div class="dashboard-content">{{ $menu['name'] }}</div>
-            </div>
+              <a href="{{ isset($menu['route']) ? $menu['route'] : '#' }}">
+                  <div class="dashboard-item">
+                      <div class="icon-wrapper icon-{{ $menu['color'] }}">
+                          <i class="fas {{ $menu['icon'] }}"></i>
+                      </div>
+                      <div class="dashboard-content">{{ $menu['name'] }}</div>
+                  </div>
+              </a>
           </div>
-        @endforeach
+          @endforeach
+
+
       </div>
     </div>
   </section>
