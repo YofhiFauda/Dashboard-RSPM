@@ -2,27 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\BpjsService;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 
 class LayananBpjsController extends Controller
 {
     public function index()
     {
-        return view('LayananBpjs.layananBpjs');
+        $data = BpjsService::all();
+        return view('LayananBpjs.layananBpjs', compact('data'));
     }
 
     public function generatePdf(Request $request)
     {
-        // Ambil jalur file jasper dari session
-        $jasperFile = session('jasper_file');
-    
-        // Cek apakah file jasper ada
+        // Mengambil ID dari query string
+        $id = $request->id;
+
+        Log::info('ID received for PDF generation: ' . $id); // Check the ID received
+
+        // Fetch data from the database using the provided ID
+        $data = BpjsService::find($id);
+        Log::info("Data Fetch: " . json_encode($data));
+
+        if (!$data) {
+            return redirect()->back()->withErrors('Data not found.');
+        }
+
+        // Get the Jasper file path from the database
+        $jasperFile = $data->file_jasper; // Menggunakan jalur absolut
+        Log::info("Letak Dari Jasper file: " . $jasperFile);
+
+        
+        // Check if Jasper file exists
         if (!$jasperFile || !file_exists($jasperFile)) {
-            return redirect()->back()->withErrors('Jasper file not found. Please upload a file first.');
+            return redirect()->back()->withErrors('Jasper file not found.');
         }
     
         // Dapatkan nama asli file jasper tanpa ekstensi
@@ -39,11 +56,23 @@ class LayananBpjsController extends Controller
     
         // Perintah baru tanpa `cmd /c`
         $command = "cd /d $javaSrcPath && $javaExecutable @$argFilePath $javaClass \"$jasperFile\" \"$outputPdfPath\"";
-    
+
         // Inisialisasi proses dengan `fromShellCommandline`
         $process = Process::fromShellCommandline($command);
+
+        // Set timeout 120 seconds
+        $process->setTimeout(120);
+        $process->run(function ($type, $buffer) {
+            if (Process::ERR === $type) {
+                Log::error($buffer);
+            } else {
+                Log::info($buffer);
+            }
+        });
     
         try {
+            Log::info("Starting PDF generation...");
+            Log::info("Command executed: " . $command);
             Log::info("Generating PDF from Jasper file: " . $jasperFile);
             Log::info("Output PDF path: " . $outputPdfPath);
     
@@ -65,55 +94,55 @@ class LayananBpjsController extends Controller
         }
     }
 
-    public function uploadFile(Request $request)
-    {
-        // Validasi file
-    // Validasi file
-        $request->validate([
-            'file' => 'required|file|max:4098',
-        ]);
-        if ($request->hasFile('file')) {
-            // Dapatkan informasi file
-            $file = $request->file('file');
+    // public function uploadFile(Request $request)
+    // {
+    //     // Validasi file
+    // // Validasi file
+    //     $request->validate([
+    //         'file' => 'required|file|max:4098',
+    //     ]);
+    //     if ($request->hasFile('file')) {
+    //         // Dapatkan informasi file
+    //         $file = $request->file('file');
 
-            // Dapatkan nama asli file
-            $originalFileName = $file->getClientOriginalName();
-            $extension = $file->getClientOriginalExtension();
+    //         // Dapatkan nama asli file
+    //         $originalFileName = $file->getClientOriginalName();
+    //         $extension = $file->getClientOriginalExtension();
 
-            // Log informasi file
-            Log::info('Uploaded file name: ' . $originalFileName);
-            Log::info('Uploaded file path: ' . $file->getRealPath());
-            Log::info('Uploaded file size: ' . $file->getSize());
-            Log::info('Uploaded file MIME type: ' . $file->getMimeType());
+    //         // Log informasi file
+    //         Log::info('Uploaded file name: ' . $originalFileName);
+    //         Log::info('Uploaded file path: ' . $file->getRealPath());
+    //         Log::info('Uploaded file size: ' . $file->getSize());
+    //         Log::info('Uploaded file MIME type: ' . $file->getMimeType());
 
-            // Cek ekstensi file
-            if (!in_array($extension, ['jasper', 'pdf'])) {
-                return back()->withErrors(['file' => 'File must be a .jasper or .pdf file.']);
-            }
+    //         // Cek ekstensi file
+    //         if (!in_array($extension, ['jasper', 'pdf'])) {
+    //             return back()->withErrors(['file' => 'File must be a .jasper or .pdf file.']);
+    //         }
 
-            // Membuat nama folder baru berdasarkan nama file tanpa ekstensi
-            // $folderName = pathinfo($originalFileName, PATHINFO_FILENAME);
+    //         // Membuat nama folder baru berdasarkan nama file tanpa ekstensi
+    //         // $folderName = pathinfo($originalFileName, PATHINFO_FILENAME);
             
-            // Menentukan path penyimpanan
-            $storagePath = public_path('storage/jasper/');
-            Log::info('penyimpanan file : ' . $storagePath);
+    //         // Menentukan path penyimpanan
+    //         $storagePath = public_path('storage/jasper/');
+    //         Log::info('penyimpanan file : ' . $storagePath);
 
-            // Buat direktori jika belum ada
-            if (!file_exists($storagePath)) {
-                mkdir($storagePath, 0777, true);
-            }
+    //         // Buat direktori jika belum ada
+    //         if (!file_exists($storagePath)) {
+    //             mkdir($storagePath, 0777, true);
+    //         }
 
-            // Menyimpan file ke lokasi yang ditentukan
-            $file->move($storagePath, $originalFileName);
-            Log::info('Menyimpan file ke lokasi yang ditentukan : ' . $file);
+    //         // Menyimpan file ke lokasi yang ditentukan
+    //         $file->move($storagePath, $originalFileName);
+    //         Log::info('Menyimpan file ke lokasi yang ditentukan : ' . $file);
 
-            // Simpan jalur file jasper di session
-            session(['jasper_file' => $storagePath . $originalFileName]);
+    //         // Simpan jalur file jasper di session
+    //         session(['jasper_file' => $storagePath . $originalFileName]);
 
-            // Mengembalikan respon setelah file berhasil diupload
-            return back()->with('success', 'File uploaded successfully: ' . $originalFileName);
-        }
+    //         // Mengembalikan respon setelah file berhasil diupload
+    //         return back()->with('success', 'File uploaded successfully: ' . $originalFileName);
+    //     }
 
-        return back()->withErrors(['file' => 'No file was uploaded.']);
-    }
+    //     return back()->withErrors(['file' => 'No file was uploaded.']);
+    // }
 }

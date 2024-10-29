@@ -35,43 +35,54 @@
     </div>
 </nav>
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <div class="card">
-                    <div class="card-header">Convert Jasper File to PDF</div>
-                    <div class="card-body">
-                        <!-- Form upload -->
-                        <form action="{{ route('layanan-bpjs.uploadFile') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="jasperFile" class="form-label">Upload Jasper File</label>
-                                <input class="form-control" type="file" id="jasperFile" name="file" accept=".jasper" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Upload File</button> <!-- Tombol untuk mengunggah file -->
-                        </form>
-                        @if(session('success'))
-                            <div>{{ session('success') }}</div>
-                        @endif
-
-                        <div class="mt-2">
-                            <!-- Tambahkan tombol untuk generate PDF -->
-                            <form action="{{ route('layanan-bpjs.generatePDF') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="download-btn">Generate PDF</button>
-                            </form>
-                        </div>
-                        @if ($errors->any())
-                            <div class="alert alert-danger mt-3">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                    </div>
-                </div>
+    <!-- Tabel Data BPJS -->
+    <div class="row justify-content-center mt-4">
+            <div class="col-md-10">
+                <h3>Data Pelayanan BPJS</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID Pasien</th>
+                            <th>Nama Pasien</th>
+                            <th>Tanggal Lahir</th>
+                            <th>Jenis Kelamin</th>
+                            <th>No BPJS</th>
+                            <th>Tanggal Pelayanan</th>
+                            <th>Jenis Pelayanan</th>
+                            <th>Dokter</th>
+                            <th>Keterangan</th>
+                            <th>File Jasper</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($data as $item)
+                        <tr>
+                            <td>{{ $item->ID_Pasien }}</td>
+                            <td>{{ $item->Nama_Pasien }}</td>
+                            <td>{{ $item->Tanggal_Lahir }}</td>
+                            <td>{{ $item->Jenis_Kelamin }}</td>
+                            <td>{{ $item->No_BPJS }}</td>
+                            <td>{{ $item->Tanggal_Pelayanan }}</td>
+                            <td>{{ $item->Jenis_Pelayanan }}</td>
+                            <td>{{ $item->Dokter }}</td>
+                            <td>{{ $item->Keterangan }}</td>
+                            <td>
+                                @if($item->file_jasper)
+                                    <form action="{{ route('layanan-bpjs.generatePDF') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $item->ID_Pasien }}">
+                                        <button type="submit" class="btn btn-link p-0" title="Generate PDF">
+                                            <i class="bi bi-file-earmark-pdf-fill text-danger" style="font-size: 1.5em;"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="text-muted">No file</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -11,3 +11,6 @@ Route::get('/', [PoliklinikController::class, 'index']);
 Route::get('/layanan-bpjs', [LayananBpjsController::class, 'index'])->name('layanan-bpjs');
 Route::post('/upload-file', [LayananBpjsController::class, 'uploadFile'])->name('layanan-bpjs.uploadFile');
 Route::post('/generate-pdf',[LayananBpjsController::class, 'generatePDF']) -> name('layanan-bpjs.generatePDF');
+// Route::post('/layanan-bpjs/generate-pdf/{id}', [LayananBpjsController::class, 'generatePdf'])->name('layanan-bpjs.generatePdf');
+
+
