@@ -9,8 +9,9 @@ Route::get('/', [PoliklinikController::class, 'index']);
 
 // Menu Layanan BPJS
 Route::get('/layanan-bpjs', [LayananBpjsController::class, 'index'])->name('layanan-bpjs');
+Route::get('/resume-pasien', [LayananBpjsController::class, 'resumePasien'])->name('layanan-bpjs.resumePasien');
+
 Route::post('/upload-file', [LayananBpjsController::class, 'uploadFile'])->name('layanan-bpjs.uploadFile');
 Route::post('/generate-pdf',[LayananBpjsController::class, 'generatePDF']) -> name('layanan-bpjs.generatePDF');
-// Route::post('/layanan-bpjs/generate-pdf/{id}', [LayananBpjsController::class, 'generatePdf'])->name('layanan-bpjs.generatePdf');
 
 

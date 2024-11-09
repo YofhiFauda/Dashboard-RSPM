@@ -7,7 +7,9 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use PHPJasper\PHPJasper;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LayananBpjsController extends Controller
 {
@@ -92,6 +94,35 @@ class LayananBpjsController extends Controller
     
             return redirect()->back()->withErrors('Failed to generate PDF.');
         }
+    }
+
+    public function resumePasien(Request $request)
+    {
+        $query = DB::connection('production')->table('resume_pasien');
+    
+        // Jika ada pencarian, tambahkan kondisi pencarian
+        if ($request->has('search') && !empty($request->input('search'))) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('keluhan_utama', 'like', "%{$search}%")
+                  ->orWhere('diagnosa_utama', 'like', "%{$search}%")
+                  ->orWhere('kd_diagnosa_utama', 'like', "%{$search}%")
+                  ->orWhere('diagnosa_sekunder', 'like', "%{$search}%")
+                  ->orWhere('kd_diagnosa_sekunder', 'like', "%{$search}%")
+                  ->orWhere('diagnosa_sekunder2', 'like', "%{$search}%")
+                  ->orWhere('kd_diagnosa_sekunder2', 'like', "%{$search}%")
+                  ->orWhere('diagnosa_sekunder3', 'like', "%{$search}%");
+            });
+        }
+    
+        // Ambil jumlah item per halaman dari request, default ke 10 jika tidak ada
+        $itemsPerPage = $request->input('itemsPerPage', 10); // Pastikan ini sesuai dengan nama input di frontend
+    
+        // Lakukan paginasi pada query
+        $result = $query->paginate($itemsPerPage);
+    
+        // Kembalikan hasil ke view
+        return view('LayananBpjs.resumePasien', compact('result'));
     }
 
     // public function uploadFile(Request $request)

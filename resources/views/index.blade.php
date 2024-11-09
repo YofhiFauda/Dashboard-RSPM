@@ -93,7 +93,7 @@
   <!-- Search Section -->
   <section class="content">
     <div class="container-fluid">
-        <h2 class="text-center display-4 mt-5">Dashboard</h2>
+        <h2 class="text-center display-4 mt-5">Dashboard RSPM</h2>
         <div class="row">
             <div class="col-md-8 offset-md-2 mt-3">
                 <div class="input-group">
