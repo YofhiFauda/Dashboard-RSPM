@@ -1,41 +1,33 @@
 package com.generatepdf;
 
-import java.util.HashMap;
+import java.io.File;
 
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 
 public class CompileReport {
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.err.println("Usage: java CompileReport <path_to_jasper_file> <output_pdf_file>");
-            return;
-        }
+    
+    try {
+        // Compile .jrxml file to .jasper
+        
+        // Path to your .jrxml file
+        String jrxmlFile = "C:\\xampp\\htdocs\\dashboard-rs-paru\\app\\generatepdf\\src\\report\\Resum1.jrxml"; // Replace with the actual path
+        // Path to output .jasper file
+        String jasperFile = "C:\\xampp\\htdocs\\dashboard-rs-paru\\app\\generatepdf\\src\\report\\Resum1.jrxml"; // Replace with desired output path
 
-        try {
-            // Path ke file .jasper dari argumen
-            // String jasperFile = args[0];
-            String jasperFile = "C:\\xampp\\htdocs\\dashboard-rs-paru\\storage\\app\\public\\jasper\\report10.jasper";
-            // Path untuk output file PDF
-            String outputFile = "C:\\xampp\\htdocs\\dashboard-rs-paru\\storage\\app\\public\\pdf\\report10.pdf";
+        
+            JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFile);
+            System.out.println("Compilation complete.");
+            
+            // Export compiled report to .jasper file
+            File outputFile = new File(jasperFile);
+            JasperCompileManager.writeReportToXmlFile(jasperReport, outputFile.getPath());
+            System.out.println("File saved as: " + outputFile.getPath());
 
-
-
-            // Mengisi laporan dengan data (misalnya dengan parameter kosong)
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, new HashMap<>(), new JREmptyDataSource());
-
-            // Menyimpan laporan ke PDF
-            JasperExportManager.exportReportToPdfFile(jasperPrint, outputFile);
-
-            System.out.println("Laporan berhasil dibuat: " + outputFile);
-            System.out.println("Received Jasper file path: " + jasperFile);
-            System.out.println("Jasper file path: " + jasperFile);
-            System.out.println("Output PDF path: " + outputFile);
-
-
-        } catch (Exception e) {
+        } catch (JRException e) {
+            System.err.println("Error compiling report: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -42,6 +42,16 @@
             background-color: #405D72;
             color: #FFF8F3;
         }
+        .btn-custom {
+            background-color: #405D72; /* Primary background color */
+            color: white; /* White text color */
+            border: none; /* Remove border */
+        }
+
+        .btn-custom:hover {
+                background-color: #759cba; /* Hover background color */
+                color: white; /* Text color on hover */
+        }
         .form-select, .form-control {
             border: 1px solid #758694;
             color: #405D72;
@@ -79,16 +89,15 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <div class="ms-auto">
                 <a class="btn btn-outline-light me-2" href="{{ url('/') }}">Dashboard</a>
-                <a class="btn btn-outline-light me-2" href="{{ route('layanan-bpjs') }}">Layanan BPJS</a>
+                <a class="btn btn-outline-light" href="{{ url('/patients') }}">Generate Bjps</a>
                 <a class="btn btn-outline-light me-2" href="{{ route('layanan-bpjs.resumePasien') }}">Resume Pasien</a>
-                <a class="btn btn-outline-light" href="{{ route('layanan-bpjs.generateReport') }}">Generate Bjps</a>
             </div>
         </div>
     </div>
 </nav>
 
-<div class="container">
-    <div class="table-container" style="max-width:100%">
+<div class="container" style="max-width:100%">
+    <div class="table-container" >
         <form method="GET" action="{{ url()->current() }}">
             <div class="d-flex justify-content-between mb-3">
                 <div>
@@ -111,6 +120,7 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>No Rawat</th>
                         <th>Keluhan Utama</th>
                         <th>Diagnosa Utama</th>
                         <th>KD Diagnosa Utama</th>
@@ -119,12 +129,14 @@
                         <th>Diagnosa Sekunder 2</th>
                         <th>KD Diagnosa Sekunder 2</th>
                         <th>Diagnosa Sekunder 3</th>
+                        <th>File</th>
                     </tr>
                 </thead>
                 <tbody id="dataTableBody">
                     @if(!empty($result) && count($result) > 0)
                         @foreach($result as $item)
                             <tr>
+                                <td>{{ $item->no_rawat }}</td>
                                 <td>{{ $item->keluhan_utama }}</td>
                                 <td>{{ $item->diagnosa_utama }}</td>
                                 <td>{{ $item->kd_diagnosa_utama }}</td>
@@ -133,6 +145,11 @@
                                 <td>{{ $item->diagnosa_sekunder2 }}</td>
                                 <td>{{ $item->kd_diagnosa_sekunder2 }}</td>
                                 <td>{{ $item->diagnosa_sekunder3 }}</td>
+                                <td>
+                                    <a href="{{ route('layanan-bpjs.generateReport', ['id' => $item->no_rawat]) }}" class="btn btn-custom btn-sm">
+                                        Generate
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     @else

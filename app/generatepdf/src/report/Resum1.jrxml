@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Resum1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3630eb60-a3e5-40f3-9f85-9b54d84f3beb">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="dashboard_rs_paru"/>
+	<parameter name="namars" class="java.lang.String"/>
+	<parameter name="alamatrs" class="java.lang.String"/>
+	<parameter name="kotars" class="java.lang.String"/>
+	<parameter name="propinsirs" class="java.lang.String"/>
+	<parameter name="kontakrs" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[Select * from patients]]>
+	</queryString>
+	<field name="ID_Pasien" class="java.math.BigInteger">
+		<property name="com.jaspersoft.studio.field.name" value="ID_Pasien"/>
+		<property name="com.jaspersoft.studio.field.label" value="ID_Pasien"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="nm_pasien" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nm_pasien"/>
+		<property name="com.jaspersoft.studio.field.label" value="nm_pasien"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="umurdaftar" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="umurdaftar"/>
+		<property name="com.jaspersoft.studio.field.label" value="umurdaftar"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="tgl_lahir" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="tgl_lahir"/>
+		<property name="com.jaspersoft.studio.field.label" value="tgl_lahir"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="pekerjaan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pekerjaan"/>
+		<property name="com.jaspersoft.studio.field.label" value="pekerjaan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="alamat" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="alamat"/>
+		<property name="com.jaspersoft.studio.field.label" value="alamat"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="no_rkm_medis" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="no_rkm_medis"/>
+		<property name="com.jaspersoft.studio.field.label" value="no_rkm_medis"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="ruang" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ruang"/>
+		<property name="com.jaspersoft.studio.field.label" value="ruang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="jk" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="jk"/>
+		<property name="com.jaspersoft.studio.field.label" value="jk"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="tgl_registrasi" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="tgl_registrasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="tgl_registrasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="tanggalkeluar" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="tanggalkeluar"/>
+		<property name="com.jaspersoft.studio.field.label" value="tanggalkeluar"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="created_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<field name="updated_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patients"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="75" splitType="Stretch">
+			<textField isStretchWithOverflow="true" evaluationTime="Band">
+				<reportElement key="Rumah Sakit Paru Madiun" x="3" y="0" width="548" height="30" uuid="f52a27a0-198e-400e-9b21-e50f0d214386">
+					<property name="com.jaspersoft.studio.element.name" value="Rumah Sakit Paru Madiun"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Band">
+				<reportElement key="Rumah Sakit Paru Madiun" x="3" y="30" width="548" height="20" uuid="ed23fc29-588c-4b22-a7a5-3fd0351feaa3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{alamatrs}+","+$P{kotars}+","+$P{propinsirs}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Band">
+				<reportElement key="Rumah Sakit Paru Madiun" x="80" y="50" width="400" height="20" uuid="01a56062-c0e6-40d9-acf9-21cfc8a603f0">
+					<property name="com.jaspersoft.studio.element.name" value="Rumah Sakit Paru Madiun"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="54" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="1" width="555" height="1" uuid="944d8c1d-1d54-4076-9ae9-5d76236f398f"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="-3" y="12" width="548" height="30" uuid="de2d8941-d78b-4a97-924e-2a7bcacd05c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESUME MEDIS PASIEN]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="53" width="555" height="1" uuid="397ea711-b759-48f9-a2b2-7ea66ee84cef"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="120" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="6" width="66" height="20" uuid="372f2476-78a8-47de-b8dd-e7d8320e3663"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Nama Pasien]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="26" width="66" height="20" uuid="a341f036-e003-4507-bb09-371c2c69ee1b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Umur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="46" width="66" height="20" uuid="05f95372-7461-4f18-873c-4e60c6520c93"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Tgl Lahir]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="86" width="66" height="20" uuid="5618f190-f974-4022-93a5-e230f33e359b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Alamat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="66" width="66" height="20" uuid="09e779a7-5df8-48dd-a5ec-d3a24a869ec6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Pekerjaan]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="69" y="6" width="241" height="20" uuid="ef20c45e-f8c4-4606-a492-a35562a8b4ff"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nm_pasien}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="26" width="241" height="20" uuid="eb91fded-05cc-4917-98b7-b36e74fc95f5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{umurdaftar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="46" width="241" height="20" uuid="67ac4e5b-d19b-414d-a3c6-9b42dc6f41c7"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tgl_lahir}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="66" width="241" height="20" uuid="c3d2d53c-0dc4-4312-b7c0-d77972898204"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{pekerjaan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="86" width="241" height="20" uuid="138434d9-b833-4e0d-bc81-123dac40b5ae"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{alamat}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="310" y="6" width="80" height="20" uuid="e23980f3-f713-4d26-b1b0-5ce673013650"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[No Rekam Medis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="26" width="80" height="20" uuid="9a78851b-2701-4f85-b2af-57be1b1cecd5"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Ruang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="46" width="80" height="20" uuid="c9e3723a-9dd5-4119-ac55-bbb8e010b4e7"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Jenis Kelamin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="86" width="80" height="20" uuid="6fcc4d57-042e-4a62-96ab-a9b311e31778"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Tanggal Keluar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="66" width="80" height="20" uuid="01b39a4a-222c-4b3f-afa7-11a30ff938ce"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Tanggal Masuk]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="393" y="6" width="158" height="20" uuid="36529fd6-06cf-4e62-8392-f94c636d1ffe"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{no_rkm_medis}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="393" y="26" width="158" height="20" uuid="3b20c87e-d6e5-481c-87cd-1982147db98f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ruang}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="393" y="46" width="158" height="20" uuid="e7c583aa-e939-4ece-bb99-389335dbc80e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jk}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="393" y="66" width="158" height="20" uuid="ca48d7f5-7309-47b2-bdbe-e3887cda071b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tgl_registrasi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="393" y="86" width="158" height="20" uuid="3ff90cde-9936-4ae0-a076-43cf80b1939f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tanggalkeluar}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+</jasperReport>

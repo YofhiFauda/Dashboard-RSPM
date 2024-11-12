@@ -51,14 +51,14 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid" style="margin-right:10px; margin-left:10px">
         <a class="navbar-brand" href="{{ url('/') }}">RSPM</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="ms-auto"> <!-- Added margin for right alignment -->
+            <div class="ms-auto"> 
                 <a class="btn btn-outline-secondary" href="{{ url('/') }}">
                     Dashboard
                 </a>
@@ -68,22 +68,14 @@
                 <a class="btn btn-outline-secondary" href="{{ route('layanan-bpjs.resumePasien') }}">
                     Resume Pasien
                 </a>
-                <a class="btn btn-outline-secondary" href="{{ route('layanan-bpjs.generateReport') }}">
+                <a class="btn btn-outline-secondary" href="{{ url('/patients') }}">
                      Generate Pasien
                 </a>
 
-
-                <!-- Button Navbar -->
-                <!-- <form action="{{ route('layanan-bpjs.generateReport') }}" method="POST" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-secondary">
-                        Generate Jasper
-                    </button>
-                </form> -->
             </div>
         </div>
     </div>
-</nav>
+</nav> -->
 
 <!-- Tabel Data BPJS -->
 <div class="container mt-4">

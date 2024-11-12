@@ -125,6 +125,96 @@ class LayananBpjsController extends Controller
         return view('LayananBpjs.resumePasien', compact('result'));
     }
 
+    public function generateReport(Request $request, $id)
+    {
+        // Cek apakah route benar dipanggil dan $id diterima
+        try {
+            $id = $request->id;
+            Log::info('Generating report for ID: ' . $id);
+            // Pastikan ID valid dan ada di database
+            // Query untuk mendapatkan data pasien berdasarkan ID
+            $patient = DB::connection('production')->table('resume_pasien')
+            ->where('no_rawat', $id)
+            ->first();
+
+
+            // Log data pasien untuk debug
+            Log::info('Patient data:', (array)$patient);
+    
+            // Cek jika data pasien ditemukan
+            if (!$patient) {
+                throw new \Exception("Data pasien dengan ID {$id} tidak ditemukan.");
+            }
+    
+            // Path ke file Jasper
+            $jasperFile = public_path('storage/jasper/rptLaporanResume.jasper');
+            if (!file_exists($jasperFile)) {
+                throw new \Exception("File Jasper tidak ditemukan di path: " . $jasperFile);
+            }
+    
+            // Tentukan output path
+            $outputPath = public_path('storage/pdf/') . 'ResumeMedisPasien_' . $id . '_' . time();
+    
+            // Parameter Jasper
+            $parameters = [
+                'namars' => 'RUMAH SAKIT PARU MADIUN',
+                'alamatrs' => 'jl. yosudarso no 8',
+                'kotars' => 'Kota Madiun',
+                'propinsirs' => 'Jawa Timur',
+                'kontakrs' => '081235513679',
+                'emailrs' => 'rspm@gmail.com',
+                'keluhan_utama' => $patient->keluhan_utama ?? '',
+                'diagnosa_utama' => $patient->diagnosa_utama ?? '',
+                'kd_diagnosa_utama' => $patient->kd_diagnosa_utama ?? '',
+                'diagnosa_sekunder' => $patient->diagnosa_sekunder ?? '',
+                'kd_diagnosa_sekunder' => $patient->kd_diagnosa_sekunder ?? '',
+                'diagnosa_sekunder2' => $patient->diagnosa_sekunder2 ?? '',
+                'kd_diagnosa_sekunder2' => $patient->kd_diagnosa_sekunder2 ?? '',
+                'diagnosa_sekunder3' => $patient->diagnosa_sekunder3 ?? ''
+            ];
+    
+            // Perintah eksekusi JasperStarter
+            $jasperExecutable = '"C:\\Program Files (x86)\\JasperStarter\\bin\\jasperstarter.exe"';
+            $command = [
+                $jasperExecutable,
+                'pr',
+                escapeshellarg($jasperFile),
+                '-o',
+                escapeshellarg($outputPath),
+                '-f',
+                'pdf',
+                '-P',
+            ];
+    
+            foreach ($parameters as $key => $value) {
+                $command[] = escapeshellarg("{$key}={$value}");
+            }
+            $command[] = '--db-url jdbc:mysql://192.168.5.100:3306/db-tester';
+    
+            // Jalankan perintah JasperStarter
+            $process = Process::fromShellCommandline(implode(" ", $command));
+            $process->setTimeout(3600); // 1 jam timeout
+            $process->run();
+    
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+    
+            $pdfPath = $outputPath . '.pdf';
+            if (!file_exists($pdfPath)) {
+                throw new \Exception("Laporan tidak berhasil dibuat.");
+            }
+    
+            // Download file PDF
+            return response()->download($pdfPath)->deleteFileAfterSend(true);
+    
+        } catch (\Exception $e) {
+            Log::error("Gagal menghasilkan laporan untuk ID {$id}: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghasilkan laporan. Silakan coba lagi.');
+        }
+    }
+    
+
     // public function uploadFile(Request $request)
     // {
     //     // Validasi file
