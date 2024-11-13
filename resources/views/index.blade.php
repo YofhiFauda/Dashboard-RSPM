@@ -13,78 +13,120 @@
   <link rel="stylesheet" href="{{ asset('lte/dist/css/adminlte.min.css') }}">
   <!-- Custom CSS -->
   <style>
-    html, body {
-      overflow-y: scroll; /* Menyembunyikan scrollbar vertikal */
-    }
-        /* Navbar styling */
-    .navbar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative; /* Prevents unwanted shifts */
-      width: 100%; /* Ensures the navbar spans the full width */
+  /* Background gradient */
+
+  html, body {
+      overflow-y: hidden; /* Menyembunyikan scrollbar vertikal */
     }
 
-    /* Search form styling */
-    .form-control-lg {
-      width: 100%; /* Prevents resizing when typing */
-      max-width: 600px; /* Limits the maximum width */
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: linear-gradient(145deg, #f2f7f9, #d1e6f1, #a8c8de);
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #333;
+  }
+
+  /* Navbar styling */
+  .navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* Header title */
+  h2.display-4 {
+    color: #4a6572;
+    font-weight: bold;
+    margin-top: 2rem;
+  }
+
+  /* Search form styling */
+  .form-control-lg {
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+
+  .input-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .input-group {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  .input-group-append .btn {
+    border: 1px solid #4a6572;
+    color: #4a6572;
+    background-color: #fff;
+    border-radius: 6px;
+  }
 
-    /* Adjust margin or padding if needed */
-    .navbar-nav {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      flex-direction: row;
-    }
-    /* Navbar styling */
-    .dashboard-item {
-      display: flex;
-      align-items: center;
-      background-color: white;
-      border-radius: 10px;
-      margin: 10px;
-      padding: 10px;
-      flex-shrink: 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease-in-out;
-    }
-    .dashboard-item:hover {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .icon-wrapper {
-      width: 50px;
-      height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 5px;
-      margin-right: 15px;
-    }
-    .icon-blue { background-color: #17a2b8; color: white; }
-    .icon-green { background-color: #28a745; color: white; }
-    .icon-yellow { background-color: #ffc107; color: white; }
-    .icon-red { background-color: #dc3545; color: white; }
-    .dashboard-content {
-      font-size: 18px;
-      font-weight: bold;
-    }
-  </style>
+  .input-group-append .btn:hover {
+    color: #fff;
+    background-color: #4a6572;
+  }
+
+  /* Dashboard item styling with glassmorphism */
+  .dashboard-item {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.3); /* Semi-transparent white */
+    border-radius: 16px;
+    margin: 10px;
+    padding: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px); /* Blur effect for glassmorphism */
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dashboard-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(74, 101, 114, 0.2);
+    background: rgba(255, 255, 255, 0.4); /* Slightly more opaque on hover */
+  }
+
+  /* Dashboard icon styling */
+  .icon-wrapper {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-right: 15px;
+    font-size: 1.5rem;
+    color: white;
+  }
+
+  /* Soft pastel color themes */
+  .icon-blue { background-color: #7da8e5; }
+  .icon-green { background-color: #88d497; }
+  .icon-yellow { background-color: #ffcc66; }
+  .icon-red { background-color: #f28989; }
+
+  /* Dashboard content styling */
+  .dashboard-content {
+    font-size: 17px;
+    font-weight: 500;
+    color: #2d4059;
+  }
+</style>
+
+
+
 </head>
 <body>
 <div class="wrapper">
   <!-- Search Section -->
   <section class="content">
     <div class="container-fluid">
-        <h2 class="text-center display-4 mt-5">Dashboard</h2>
+        <h2 class="text-center display-4 mt-5">Dashboard RSPM</h2>
         <div class="row">
             <div class="col-md-8 offset-md-2 mt-3">
                 <div class="input-group">
@@ -107,35 +149,39 @@
         <!-- Dashboard Items -->
         @php
           $menus = [
-            ['name' => 'Paru & Pernapasan', 'icon' => 'fa-envelope', 'color' => 'blue'],
-            ['name' => 'Radiologi', 'icon' => 'fa-tasks', 'color' => 'green'],
-            ['name' => 'Jantung & Pembulu Darah', 'icon' => 'fa-chart-bar', 'color' => 'yellow'],
-            ['name' => 'Penyakit Dalam', 'icon' => 'fa-star', 'color' => 'red'],
-            ['name' => 'Laboratorium', 'icon' => 'fa-cogs', 'color' => 'blue'],
-            ['name' => 'Anak', 'icon' => 'fa-calendar-alt', 'color' => 'green'],
-            ['name' => 'Rehab Medik', 'icon' => 'fa-comments', 'color' => 'yellow'],
-            ['name' => 'Akupuntur Medik', 'icon' => 'fa-bell', 'color' => 'red'],
-            ['name' => 'Saraf Neurologi', 'icon' => 'fa-users', 'color' => 'blue'],
-            ['name' => 'Psikologi', 'icon' => 'fa-folder-open', 'color' => 'green'],
-            ['name' => 'Kandungan & Kebidanan', 'icon' => 'fa-chart-pie', 'color' => 'yellow'],
-            ['name' => 'Jiwa', 'icon' => 'fa-life-ring', 'color' => 'red'],
-            ['name' => 'Pelayanan BPJS', 'icon' => 'fa-shield-alt', 'color' => 'blue'],
+            ['name' => 'Paru & Pernapasan', 'icon' => 'fa-lungs', 'color' => 'blue'],
+            ['name' => 'Radiologi', 'icon' => 'fa-x-ray', 'color' => 'green'],
+            ['name' => 'Jantung & Pembulu Darah', 'icon' => 'fa-heartbeat', 'color' => 'yellow'],
+            ['name' => 'Penyakit Dalam', 'icon' => 'fa-stethoscope', 'color' => 'red'],
+            ['name' => 'Laboratorium', 'icon' => 'fa-vials', 'color' => 'blue'], 
+            ['name' => 'Anak', 'icon' => 'fa-baby', 'color' => 'green'],
+            ['name' => 'Rehab Medik', 'icon' => 'fa-dumbbell', 'color' => 'yellow'],
+            ['name' => 'Akupuntur Medik', 'icon' => 'fa-hand-sparkles', 'color' => 'red'],
+            ['name' => 'Saraf Neurologi', 'icon' => 'fa-brain', 'color' => 'blue'],
+            ['name' => 'Psikologi', 'icon' => 'fa-user-md', 'color' => 'green'],
+            ['name' => 'Kandungan & Kebidanan', 'icon' => 'fa-baby-carriage', 'color' => 'yellow'],
+            ['name' => 'Jiwa', 'icon' => 'fa-user-md', 'color' => 'red'],
+            ['name' => 'Pelayanan BPJS', 'icon' => 'fa-shield-alt', 'color' => 'blue', 'route' => route('patients.index')],
             ['name' => 'Billing', 'icon' => 'fa-file-invoice-dollar', 'color' => 'green'],
-            ['name' => 'Projects', 'icon' => 'fa-briefcase', 'color' => 'yellow'],
-            ['name' => 'Help Center', 'icon' => 'fa-question-circle', 'color' => 'red']
+            ['name' => 'Projects', 'icon' => 'fa-briefcase-medical', 'color' => 'yellow'],
+            ['name' => 'Help Center', 'icon' => 'fa-question-circle', 'color' => 'red'],
           ];
         @endphp
 
         @foreach($menus as $menu)
           <div class="col-md-3 dashboard-item-container">
-            <div class="dashboard-item">
-              <div class="icon-wrapper icon-{{ $menu['color'] }}">
-                <i class="fas {{ $menu['icon'] }}"></i>
-              </div>
-              <div class="dashboard-content">{{ $menu['name'] }}</div>
-            </div>
+              <a href="{{ isset($menu['route']) ? $menu['route'] : '#' }}">
+                  <div class="dashboard-item">
+                      <div class="icon-wrapper icon-{{ $menu['color'] }}">
+                          <i class="fas {{ $menu['icon'] }}"></i>
+                      </div>
+                      <div class="dashboard-content">{{ $menu['name'] }}</div>
+                  </div>
+              </a>
           </div>
-        @endforeach
+          @endforeach
+
+
       </div>
     </div>
   </section>

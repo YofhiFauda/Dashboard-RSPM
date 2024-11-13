@@ -2,6 +2,17 @@
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteRule ^(.*)$ public/$1 [L]
+    </IfModule>
+
+    <IfModule mod_mime.c>
+        AddType application/x-jasper .jasper
+    </IfModule>
+
+    ErrorDocument 404 /resources/views/errors/404.blade.php
+
 
     RewriteEngine On
 
