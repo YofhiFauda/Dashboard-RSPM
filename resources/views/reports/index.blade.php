@@ -102,7 +102,7 @@
             <div class="ms-auto">
                 <a class="btn btn-outline-light me-2" href="{{ url('/') }}">Dashboard</a>
                 <a class="btn btn-outline-light" href="{{ url('/patients') }}">Generate Bjps</a>
-                <a class="btn btn-outline-light me-2" href="{{ route('layanan-bpjs.resumePasien') }}">Resume Pasien</a>
+                <a class="btn btn-outline-light me-2" href="{{ url('/resume-pasien') }}">Resume Pasien</a>
             </div>
         </div>
     </div>

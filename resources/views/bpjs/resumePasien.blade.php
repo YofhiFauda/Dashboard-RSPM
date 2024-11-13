@@ -90,7 +90,7 @@
             <div class="ms-auto">
                 <a class="btn btn-outline-light me-2" href="{{ url('/') }}">Dashboard</a>
                 <a class="btn btn-outline-light" href="{{ url('/patients') }}">Generate Bjps</a>
-                <a class="btn btn-outline-light me-2" href="{{ route('layanan-bpjs.resumePasien') }}">Resume Pasien</a>
+                <a class="btn btn-outline-light me-2" href="{{ url('/resume-pasien') }}">Resume Pasien</a>
             </div>
         </div>
     </div>
@@ -146,9 +146,11 @@
                                 <td>{{ $item->kd_diagnosa_sekunder2 }}</td>
                                 <td>{{ $item->diagnosa_sekunder3 }}</td>
                                 <td>
-                                    <a href="{{ route('layanan-bpjs.generateReport', ['id' => $item->no_rawat]) }}" class="btn btn-custom btn-sm">
-                                        Generate
-                                    </a>
+                                    <form action="{{ route('bpjs.generateReport') }}" method="GET">
+                                        @csrf
+                                        <input type="hidden" name="no_rawat" value="{{ $item->no_rawat }}"> <!-- Hidden field untuk no_rawat -->
+                                        <button type="submit" class="btn btn-custom btn-sm">Generate Report</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

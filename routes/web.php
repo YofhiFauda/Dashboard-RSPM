@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PoliklinikController::class, 'index']);
 
 // Menu Layanan BPJS
-Route::get('/layanan-bpjs', [LayananBpjsController::class, 'index'])->name('layanan-bpjs');
-Route::get('/resume-pasien', [LayananBpjsController::class, 'resumePasien'])->name('layanan-bpjs.resumePasien');
-Route::get('/generate-report/{id}', [LayananBpjsController::class, 'generateReport'])->name('layanan-bpjs.generateReport');
+Route::get('/resume-pasien', [LayananBpjsController::class, 'index'])->name('bpjs.resumePasien');
+Route::get('/generate-report', [LayananBpjsController::class, 'generateReport'])->name('bpjs.generateReport');
 
 Route::post('/upload-file', [LayananBpjsController::class, 'uploadFile'])->name('layanan-bpjs.uploadFile');
 Route::post('/generate-pdf',[LayananBpjsController::class, 'generatePDF']) -> name('layanan-bpjs.generatePDF');

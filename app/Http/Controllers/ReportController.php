@@ -28,7 +28,7 @@ class ReportController extends Controller
             $patient = Patient::with('diagnosis')->findOrFail($id);
 
             // Path ke file Jasper
-            $jasperFile = public_path('storage/jasper/rptLaporanResume.jasper');
+            $jasperFile = public_path('storage/jasper/Resume.jasper');
             Log::info("Path ke file Jasper: " . $jasperFile);
 
             // Cek apakah file Jasper ada
@@ -48,37 +48,43 @@ class ReportController extends Controller
                 'propinsirs' => 'Jawa Timur',
                 'kontakrs' => '081235513679',
                 'emailrs' => 'rspm@gmail.com',
+                'ID_Pasien' => $patient -> ID_Pasien,
                 'ruang' => $patient -> ruang,
                 'tanggalkeluar' => $patient ->tanggalkeluar,
             ];
             
-    
             $jasperExecutable = '"C:\\Program Files (x86)\\JasperStarter\\bin\\jasperstarter.exe"';
-    
+            $dbHost = env('DB_HOST', 'localhost');
+            $dbPort = env('DB_PORT', '3306');
+            $dbUser = env('DB_USERNAME', 'root');
+            $dbPass = env('DB_PASSWORD', '');
+            $dbName = env('DB_DATABASE', 'dashboard_rs_paru');
+
             $command = [
                 $jasperExecutable,
                 'pr',
                 escapeshellarg($jasperFile),
+                '-t mysql',
+                '-H', $dbHost,
+                '-n', $dbName,
+                '-u', $dbUser,
                 '-o',
                 escapeshellarg($outputPath),
                 '-f',
                 'pdf',
                 '-P',
             ];
-    
             foreach ($parameters as $key => $value) {
-                $command[] = escapeshellarg("{$key}={$value}");
+                // $command[] = escapeshellarg("{$key}={$value}");
+                $command[] = escapeshellarg($key . '="' . $value . '"');
                 Log::info("Parameter {$key} = " . (is_null($value) ? 'NULL' : $value));
             }
 
-            $command[] = '--db-url jdbc:mysql://127.0.0.1:3306/dashboard_rs_paru';
-
-            
-
+            // $command[] = '--db-url jdbc:mysql://192.168.5.100/db-tester';
+    
             // Jalankan perintah JasperStarter
             $process = Process::fromShellCommandline(implode(" ", $command));
             Log::info("JasperStarter Command: " . implode(" ", $command));
-
             $process->setTimeout(3600); // 1 jam timeout
             $process->run(function ($type, $buffer) {
                 if (Process::ERR === $type) {
@@ -93,8 +99,7 @@ class ReportController extends Controller
             $error = $process->getErrorOutput();
             Log::info("JasperStarter Output: " . $output);
             Log::error("JasperStarter Error: " . $error);
-
-            // Cek apakah proses berjalan dengan sukses
+    
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
@@ -116,6 +121,7 @@ class ReportController extends Controller
             return redirect()->back()->with('error', 'Gagal menghasilkan laporan. Silakan coba lagi.');
         }
     }
+}
 
     // public function generateReport($id)
     // {
@@ -203,4 +209,3 @@ class ReportController extends Controller
     //         return redirect()->back()->with('error', 'Gagal menghasilkan laporan. Silakan coba lagi.');
     //     }
     // }
-}

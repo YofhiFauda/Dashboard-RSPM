@@ -13,90 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LayananBpjsController extends Controller
 {
-    public function index()
-    {
-        $data = BpjsService::all();
-        return view('LayananBpjs.layananBpjs', compact('data'));
-    }
-
-    public function generatePdf(Request $request)
-    {
-        // Mengambil ID dari query string
-        $id = $request->id;
-
-        Log::info('ID received for PDF generation: ' . $id); // Check the ID received
-
-        // Fetch data from the database using the provided ID
-        $data = BpjsService::find($id);
-        Log::info("Data Fetch: " . json_encode($data));
-
-        if (!$data) {
-            return redirect()->back()->withErrors('Data not found.');
-        }
-
-        // Get the Jasper file path from the database
-        $jasperFile = $data->file_jasper; // Menggunakan jalur absolut
-        Log::info("Letak Dari Jasper file: " . $jasperFile);
-
-        
-        // Check if Jasper file exists
-        if (!$jasperFile || !file_exists($jasperFile)) {
-            return redirect()->back()->withErrors('Jasper file not found.');
-        }
-    
-        // Dapatkan nama asli file jasper tanpa ekstensi
-        $originalFileName = pathinfo($jasperFile, PATHINFO_FILENAME);
-        $outputPdfPath = public_path("storage/pdf/{$originalFileName}.pdf");
-    
-        // Definisikan perintah Java
-        $javaExecutable = '"C:\\Program Files\\Java\\jdk-21\\bin\\java.exe"';
-        $jasperLibPath = public_path('storage/jasper_lib');
-        $javaSrcPath = base_path('app/generatepdf/src/main/java');
-        $argFilePath = 'C:\\Users\\yopip\\AppData\\Local\\Temp\\cp_5p9mscu70le1jsnjipns8lzry.argfile';
-    
-        $javaClass = 'com.generatepdf.CompileReport';
-    
-        // Perintah baru tanpa `cmd /c`
-        $command = "cd /d $javaSrcPath && $javaExecutable @$argFilePath $javaClass \"$jasperFile\" \"$outputPdfPath\"";
-
-        // Inisialisasi proses dengan `fromShellCommandline`
-        $process = Process::fromShellCommandline($command);
-
-        // Set timeout 120 seconds
-        $process->setTimeout(120);
-        $process->run(function ($type, $buffer) {
-            if (Process::ERR === $type) {
-                Log::error($buffer);
-            } else {
-                Log::info($buffer);
-            }
-        });
-    
-        try {
-            Log::info("Starting PDF generation...");
-            Log::info("Command executed: " . $command);
-            Log::info("Generating PDF from Jasper file: " . $jasperFile);
-            Log::info("Output PDF path: " . $outputPdfPath);
-    
-            $process->mustRun();
-    
-            Log::info("PDF successfully generated: " . $outputPdfPath);
-    
-            // Periksa apakah file PDF ada setelah proses
-            if (!file_exists($outputPdfPath)) {
-                return redirect()->back()->withErrors('PDF generation failed. Output file not found.');
-            }
-    
-            return response()->download($outputPdfPath, "{$originalFileName}.pdf")->deleteFileAfterSend(true);
-        } catch (ProcessFailedException $exception) {
-            Log::error("Failed to generate PDF: " . $exception->getMessage());
-            Log::error("Process output: " . $process->getErrorOutput());
-    
-            return redirect()->back()->withErrors('Failed to generate PDF.');
-        }
-    }
-
-    public function resumePasien(Request $request)
+    public function index(Request $request)
     {
         $query = DB::connection('production')->table('resume_pasien');
     
@@ -104,14 +21,14 @@ class LayananBpjsController extends Controller
         if ($request->has('search') && !empty($request->input('search'))) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('keluhan_utama', 'like', "%{$search}%")
-                  ->orWhere('diagnosa_utama', 'like', "%{$search}%")
-                  ->orWhere('kd_diagnosa_utama', 'like', "%{$search}%")
-                  ->orWhere('diagnosa_sekunder', 'like', "%{$search}%")
-                  ->orWhere('kd_diagnosa_sekunder', 'like', "%{$search}%")
-                  ->orWhere('diagnosa_sekunder2', 'like', "%{$search}%")
-                  ->orWhere('kd_diagnosa_sekunder2', 'like', "%{$search}%")
-                  ->orWhere('diagnosa_sekunder3', 'like', "%{$search}%");
+                $q->where('resume_pasien.keluhan_utama', 'like', "%{$search}%")
+                  ->orWhere('resume_pasien.diagnosa_utama', 'like', "%{$search}%")
+                  ->orWhere('resume_pasien.kd_diagnosa_utama', 'like', "%{$search}%")
+                  ->orWhere('resume_pasien.diagnosa_sekunder', 'like', "%{$search}%")
+                  ->orWhere('resume_pasien.kd_diagnosa_sekunder', 'like', "%{$search}%")
+                  ->orWhere('resume_pasien.diagnosa_sekunder2', 'like', "%{$search}%")
+                  ->orWhere('resume_pasien.kd_diagnosa_sekunder2', 'like', "%{$search}%")
+                  ->orWhere('resume_pasien.diagnosa_sekunder3', 'like', "%{$search}%");
             });
         }
     
@@ -122,85 +39,110 @@ class LayananBpjsController extends Controller
         $result = $query->paginate($itemsPerPage);
     
         // Kembalikan hasil ke view
-        return view('LayananBpjs.resumePasien', compact('result'));
+        return view('bpjs.resumePasien', compact('result'));
     }
 
-    public function generateReport(Request $request, $id)
+    public function generateReport(Request $request)
     {
         // Cek apakah route benar dipanggil dan $id diterima
         try {
-            $id = $request->id;
-            Log::info('Generating report for ID: ' . $id);
+            $noRawat = $request->query('no_rawat');
+                // Dekode URL untuk memastikan ID dalam format yang benar
+            Log::info('Generating report for ID: ' . $noRawat);
             // Pastikan ID valid dan ada di database
             // Query untuk mendapatkan data pasien berdasarkan ID
-            $patient = DB::connection('production')->table('resume_pasien')
-            ->where('no_rawat', $id)
-            ->first();
 
+            $patient = DB::connection('production')->table('resume_pasien')
+            ->where('no_rawat', $noRawat)
+            ->first(); // Menggunakan `first()` untuk mengambil data pasien berdasarkan no_rawat
 
             // Log data pasien untuk debug
             Log::info('Patient data:', (array)$patient);
     
             // Cek jika data pasien ditemukan
             if (!$patient) {
-                throw new \Exception("Data pasien dengan ID {$id} tidak ditemukan.");
+                return response()->json(['error' => 'Data tidak ditemukan'], 404);
             }
     
             // Path ke file Jasper
             $jasperFile = public_path('storage/jasper/rptLaporanResume.jasper');
+            Log::info("Path ke file Jasper: " . $jasperFile);
             if (!file_exists($jasperFile)) {
                 throw new \Exception("File Jasper tidak ditemukan di path: " . $jasperFile);
             }
     
             // Tentukan output path
-            $outputPath = public_path('storage/pdf/') . 'ResumeMedisPasien_' . $id . '_' . time();
-    
+            $outputPath = public_path('storage/pdf/') . 'ResumeMedisPasien_' . '_' . time();
+            Log::error("output path: " . $outputPath);
+
             // Parameter Jasper
             $parameters = [
                 'namars' => 'RUMAH SAKIT PARU MADIUN',
-                'alamatrs' => 'jl. yosudarso no 8',
+                'alamatrs' => 'Jl. Yos Sudarso No.108-112',
                 'kotars' => 'Kota Madiun',
                 'propinsirs' => 'Jawa Timur',
-                'kontakrs' => '081235513679',
-                'emailrs' => 'rspm@gmail.com',
-                'keluhan_utama' => $patient->keluhan_utama ?? '',
-                'diagnosa_utama' => $patient->diagnosa_utama ?? '',
-                'kd_diagnosa_utama' => $patient->kd_diagnosa_utama ?? '',
-                'diagnosa_sekunder' => $patient->diagnosa_sekunder ?? '',
-                'kd_diagnosa_sekunder' => $patient->kd_diagnosa_sekunder ?? '',
-                'diagnosa_sekunder2' => $patient->diagnosa_sekunder2 ?? '',
-                'kd_diagnosa_sekunder2' => $patient->kd_diagnosa_sekunder2 ?? '',
-                'diagnosa_sekunder3' => $patient->diagnosa_sekunder3 ?? ''
+                'kontakrs' => '+62 851-7692-1876',
+                'emailrs' => 'rspmanguharjo@gmail.com',
+                'norawat'   => $patient ->no_rawat ?? '',
+                'ruang' => $patient -> ruang  ?? '',
+                'tanggalkeluar' => $patient ->tanggalkeluar  ?? '',
             ];
     
             // Perintah eksekusi JasperStarter
             $jasperExecutable = '"C:\\Program Files (x86)\\JasperStarter\\bin\\jasperstarter.exe"';
+            $dbHost = env('PRODUCTION_DB_HOST', '192.168.5.100');
+            $dbPort = env('PRODUCTION_DB_PORT', '3306');
+            $dbUser = env('PRODUCTION_DB_USERNAME', 'db-tester');
+            $dbPass = env('PRODUCTION_DB_PASSWORD', 'mYbstZ4Xe4tnAfrx');
+            $dbName = env('PRODUCTION_DB_DATABASE', 'db-tester');
             $command = [
                 $jasperExecutable,
                 'pr',
                 escapeshellarg($jasperFile),
+                '-t mysql',
+                '-H', $dbHost,
+                '-n', $dbName,
+                '-u', $dbUser,
+                '-p', $dbPass,
                 '-o',
                 escapeshellarg($outputPath),
                 '-f',
                 'pdf',
                 '-P',
             ];
-    
+
             foreach ($parameters as $key => $value) {
-                $command[] = escapeshellarg("{$key}={$value}");
+                // $command[] = escapeshellarg("{$key}={$value}");
+                $command[] = "{$key}=" . escapeshellarg($value);
+                Log::info("Parameter {$key} = " . (is_null($value) ? 'NULL' : $value));
             }
-            $command[] = '--db-url jdbc:mysql://192.168.5.100:3306/db-tester';
+
     
             // Jalankan perintah JasperStarter
             $process = Process::fromShellCommandline(implode(" ", $command));
+            Log::info("JasperStarter Command: " . implode(" ", $command));
             $process->setTimeout(3600); // 1 jam timeout
-            $process->run();
+            $process->run(function ($type, $buffer) {
+                if (Process::ERR === $type) {
+                    Log::error($buffer);
+                } else {
+                    Log::info($buffer);
+                }
+            });
+
+            // Tambahkan setelah proses
+            $output = $process->getOutput();
+            $error = $process->getErrorOutput();
+            Log::info("JasperStarter Output: " . $output);
+            Log::error("JasperStarter Error: " . $error);
     
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
     
             $pdfPath = $outputPath . '.pdf';
+            Log::info("Path file PDF yang dihasilkan: " . $pdfPath);
+
             if (!file_exists($pdfPath)) {
                 throw new \Exception("Laporan tidak berhasil dibuat.");
             }
@@ -209,7 +151,7 @@ class LayananBpjsController extends Controller
             return response()->download($pdfPath)->deleteFileAfterSend(true);
     
         } catch (\Exception $e) {
-            Log::error("Gagal menghasilkan laporan untuk ID {$id}: " . $e->getMessage());
+            Log::error("Gagal menghasilkan laporan untuk ID {$noRawat}: " . $e->getMessage());
             return redirect()->back()->with('error', 'Gagal menghasilkan laporan. Silakan coba lagi.');
         }
     }
