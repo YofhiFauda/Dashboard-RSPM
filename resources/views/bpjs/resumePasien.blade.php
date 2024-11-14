@@ -99,7 +99,7 @@
 <div class="container" style="max-width:100%">
     <div class="table-container" >
         <form method="GET" action="{{ url()->current() }}">
-            <div class="d-flex justify-content-between mb-3">
+            <div class="d-flex flex-wrap gap-2 justify-content-between mb-3">
                 <div>
                     <label>Show 
                         <select id="entriesPerPage" name="itemsPerPage" class="form-select d-inline-block w-auto" onchange="this.form.submit();">
@@ -109,6 +109,18 @@
                             <option value="100" {{ request('itemsPerPage') == 100 ? 'selected' : '' }}>100</option>
                         </select>
                     </label>
+                </div>
+                <div class="d-flex col-md-4" style="margin-right: 20px;">
+                    <div style="margin-right:10px">
+                        <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}" placeholder="Dari Tanggal">
+                    </div>
+                    <div style="margin-right:10px">
+                        <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}" placeholder="Sampai Tanggal">
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a href="{{ url()->current() }}" class="btn btn-secondary">Clear</a>
+                    </div>
                 </div>
                 <div>
                     <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search..." value="{{ request('search') }}">
@@ -149,7 +161,7 @@
                                     <form action="{{ route('bpjs.generateReport') }}" method="GET">
                                         @csrf
                                         <input type="hidden" name="no_rawat" value="{{ $item->no_rawat }}"> <!-- Hidden field untuk no_rawat -->
-                                        <button type="submit" class="btn btn-custom btn-sm">Generate Report</button>
+                                        <button type="submit" class="btn btn-custom btn-sm">Report</button>
                                     </form>
                                 </td>
                             </tr>
@@ -168,6 +180,16 @@
         </div>
     </div>
 </div>
+    <!-- FILTERING TANGGAL -->
+    <script>
+        function clearFilters() {
+            document.querySelector('input[name="start_date"]').value = '';
+            document.querySelector('input[name="end_date"]').value = '';
+            document.querySelector('input[name="search"]').value = '';
+            document.getElementById('entriesPerPage').selectedIndex = 0; // Optional: reset items per page
+            document.forms[0].submit();
+        }
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

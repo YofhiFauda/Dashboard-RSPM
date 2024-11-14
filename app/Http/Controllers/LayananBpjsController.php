@@ -31,6 +31,27 @@ class LayananBpjsController extends Controller
                   ->orWhere('resume_pasien.diagnosa_sekunder3', 'like', "%{$search}%");
             });
         }
+
+        // Filter berdasarkan tgl_registrasi di tabel reg_periksa
+        if ($request->has('start_date') && !empty($request->input('start_date'))) {
+            $startDateReg = $request->input('start_date');
+            $query->whereExists(function($subQuery) use ($startDateReg) {
+                $subQuery->select(DB::raw(1))
+                        ->from('reg_periksa')
+                        ->whereColumn('reg_periksa.no_rawat', 'resume_pasien.no_rawat')
+                        ->whereDate('reg_periksa.tgl_registrasi', '>=', $startDateReg);
+            });
+        }
+
+        if ($request->has('end_date') && !empty($request->input('end_date'))) {
+            $endDateReg = $request->input('end_date');
+            $query->whereExists(function($subQuery) use ($endDateReg) {
+                $subQuery->select(DB::raw(1))
+                        ->from('reg_periksa')
+                        ->whereColumn('reg_periksa.no_rawat', 'resume_pasien.no_rawat')
+                        ->whereDate('reg_periksa.tgl_registrasi', '<=', $endDateReg);
+            });
+        }
     
         // Ambil jumlah item per halaman dari request, default ke 10 jika tidak ada
         $itemsPerPage = $request->input('itemsPerPage', 10); // Pastikan ini sesuai dengan nama input di frontend
