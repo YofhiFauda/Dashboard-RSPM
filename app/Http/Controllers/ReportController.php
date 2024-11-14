@@ -15,11 +15,22 @@ class ReportController extends Controller
     /**
      * Menampilkan daftar pasien.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $patients = Patient::with('diagnosis')->get();  // Include diagnosis
+        $query = Patient::with('diagnosis');
+    
+        // Cek jika ada filter tanggal
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $startDate = Carbon::parse($request->input('start_date'))->startOfDay();
+            $endDate = Carbon::parse($request->input('end_date'))->endOfDay();
+            $query->whereBetween('tgl_registrasi', [$startDate, $endDate]);
+        }
+    
+        $patients = $query->get();
+    
         return view('reports.index', compact('patients'));
     }
+    
 
     public function generateReport($id)
     {

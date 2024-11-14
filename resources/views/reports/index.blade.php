@@ -111,7 +111,7 @@
 <div class="container" style="max-width:100%">
     <div class="table-container">
         <form method="GET" action="{{ url()->current() }}">
-            <div class="d-flex justify-content-between mb-3">
+            <div class="d-flex flex-wrap gap-2 justify-content-between mb-3">
                 <div>
                     <label>Show 
                         <select id="entriesPerPage" name="itemsPerPage" class="form-select d-inline-block w-auto" onchange="this.form.submit();">
@@ -121,6 +121,18 @@
                             <option value="100" {{ request('itemsPerPage') == 100 ? 'selected' : '' }}>100</option>
                         </select>
                     </label>
+                </div>
+                <div class="d-flex col-md-4" style="margin-right: 20px;">
+                    <div style="margin-right:10px">
+                        <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}" placeholder="Dari Tanggal">
+                    </div>
+                    <div style="margin-right:10px">
+                        <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}" placeholder="Sampai Tanggal">
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a href="{{ url()->current() }}" class="btn btn-secondary">Clear</a>
+                    </div>
                 </div>
                 <div>
                     <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search..." value="{{ request('search') }}">
@@ -182,6 +194,15 @@
         </div>
     </div>
 </div>
+<script>
+    function clearFilters() {
+        document.querySelector('input[name="start_date"]').value = '';
+        document.querySelector('input[name="end_date"]').value = '';
+        document.querySelector('input[name="search"]').value = '';
+        document.getElementById('entriesPerPage').selectedIndex = 0; // Optional: reset items per page
+        document.forms[0].submit();
+    }
+</script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
