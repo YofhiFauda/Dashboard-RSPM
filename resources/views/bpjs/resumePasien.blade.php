@@ -110,21 +110,37 @@
                         </select>
                     </label>
                 </div>
-                <div class="d-flex col-md-4" style="margin-right: 20px;">
-                    <div style="margin-right:10px">
-                        <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}" placeholder="Dari Tanggal">
-                    </div>
-                    <div style="margin-right:10px">
-                        <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}" placeholder="Sampai Tanggal">
-                    </div>
+                <div class="d-flex justify-content-end mb-3">
                     <div>
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                        <a href="{{ url()->current() }}" class="btn btn-secondary">Clear</a>
+                        <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search..." value="{{ request('search') }}">
                     </div>
-                </div>
-                <div>
-                    <input type="text" name="search" id="searchInput" class="form-control" placeholder="Search..." value="{{ request('search') }}">
-                </div>
+                        <!-- Filter Button with Icon -->
+                    <button class="btn btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; margin-left:5px">
+                        <i class="bi bi-funnel"></i> <!-- Filter icon -->
+                    </button>
+                    
+                    <!-- Filter Dropdown Card -->
+                    <div class="dropdown-menu p-3" style="min-width: 300px;">
+                        <h5 style="display:flex; justify-content:space-between">Filters <a href="{{ url()->current() }}" class="text-danger ms-3" style="font-size: 0.9rem;">Reset</a></h5>
+                        
+                        <form method="GET" action="{{ url()->current() }}">
+
+                            <!-- Created from date -->
+                            <div class="mb-2">
+                                <label for="start_date" class="form-label">Created from</label>
+                                <input type="date" id="start_date" name="start_date" class="form-control" value="{{ request('start_date') }}" placeholder="dd/mm/yyyy">
+                            </div>
+
+                            <!-- Created until date -->
+                            <div class="mb-2">
+                                <label for="end_date" class="form-label">Created until</label>
+                                <input type="date" id="end_date" name="end_date" class="form-control" value="{{ request('end_date') }}" placeholder="dd/mm/yyyy">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 mt-3">Apply Filters</button>
+                        </form>
+                    </div>
+                 </div>
             </div>
         </form>
 
@@ -191,6 +207,8 @@
         }
     </script>
 
+
+    <!-- FITUR SEARCHING & PAGINATION -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const dataTableBody = document.getElementById("dataTableBody");

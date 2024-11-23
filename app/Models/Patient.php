@@ -21,6 +21,7 @@ class Patient extends Model
         'jk',
         'tgl_registrasi',
         'tanggalkeluar',
+        'kondisi_pulang',
     ];
 
      // Relasi ke Diagnosis
