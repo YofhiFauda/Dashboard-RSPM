@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Diagnosis extends Model
 {
     use HasFactory;
-    protected $table = 'diagnosis';  // Specify the table name
+    protected $table = 'diagnoses';  // Specify the table name
 
     protected $fillable = [
         'ID_Pasien',

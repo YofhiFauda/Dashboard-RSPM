@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDiagnosisTable extends Migration
+class CreateDiagnosesTable extends Migration
 {
     public function up()
     {
-        Schema::create('diagnosis', function (Blueprint $table) {
+        Schema::create('diagnoses', function (Blueprint $table) {
             $table->unsignedBigInteger('ID_Pasien');  // Foreign key to patients table
             $table->string('keluhan_utama')->nullable();
             $table->text('jalanya_penyakit')->nullable();
@@ -34,6 +34,6 @@ class CreateDiagnosisTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('diagnosis');
+        Schema::dropIfExists('diagnoses');
     }
 };

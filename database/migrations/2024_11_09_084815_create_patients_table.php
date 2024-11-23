@@ -20,6 +20,7 @@ class CreatePatientsTable extends Migration
             $table->enum('jk', ['Laki-laki', 'Perempuan']);
             $table->date('tgl_registrasi');
             $table->date('tanggalkeluar')->nullable();
+            $table->enum('kondisi_pulang',['Pulih', 'Meninggal']);
             $table->timestamps();
         });
     }

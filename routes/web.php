@@ -20,3 +20,4 @@ Route::post('/generate-pdf',[LayananBpjsController::class, 'generatePDF']) -> na
 Route::get('/patients', [ReportController::class, 'index'])->name('patients.index');
 // Menghasilkan laporan untuk pasien tertentu
 Route::get('/patients/{ID_patient}/generate-report', [ReportController::class, 'generateReport'])->name('patients.generateReport');
+
